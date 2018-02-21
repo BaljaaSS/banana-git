@@ -4,4 +4,4 @@ function [x,y] = demo(n)
 x = linspace(0,1,n);
 y = sin(2*pi*x);
 
-plot(x,x)
+plot(y,x)
