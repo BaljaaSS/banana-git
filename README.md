@@ -89,6 +89,12 @@ To reproduce the steps shown during the hands-on sessions follow these steps:
 
 # Tutorial 3: Merging and resolving conflicts
 
+Git helps you to merge your work with the work of your colleagues
+working on the same project. Whenever Git is able to merge all changes
+automatically it will do so. However, if two (or more) people change
+the same file at the same location so that it is not clear which
+change should override the other one then Git needs your manual input.
+
 1.  In the web frontend of Github we modify the last line of the file
     `demo.m` to
 
@@ -137,4 +143,6 @@ To reproduce the steps shown during the hands-on sessions follow these steps:
     ```
     git commit
     ```
-    
+
+# Tutorial 4: Branching and pull requests
+
