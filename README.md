@@ -29,8 +29,8 @@ add the following configuration to your global `~/.gitconfig` file
   interactive = auto
   status = auto
 [user]
-  name = Matthias Moeller
-  email = m.moller@tudelft.nl
+  name = Your Name
+  email = You@Mail.Address
 [core]
   excludesfile = ~/.gitignore_global
 ```
@@ -73,6 +73,7 @@ that should be ignored by git in the global file `~/.gitignore_global`
 .DS_Store
 ```
 
+
 # Tutorial 2: Getting started wit Github
 
 To reproduce the steps shown during the hands-on sessions follow these steps:
@@ -85,3 +86,55 @@ To reproduce the steps shown during the hands-on sessions follow these steps:
     git clone https://github.com/mmoelle1/banana-git.git
     ```
 
+
+# Tutorial 3: Merging and resolving conflicts
+
+1.  In the web frontend of Github we modify the last line of the file
+    `demo.m` to
+
+    ```
+    plot(y,x)
+    ```
+    
+    and commit the changes to the repository by clicking the `Commit`
+    button.
+
+2.  In the local checkout of the repository we modify the last line of
+    the file `demo.m` to
+
+    ```
+    plot(y,x)
+    ```
+
+    and commit the changes to the repository by running in the terminal
+
+    ```
+    git commit -m "Changing demo.m"
+    ```
+
+    without having updated the local checkout of the repository before.
+
+3.  This results in a merge conflict that cannot be solved automatically
+
+    ```
+    Auto-merging demo.m
+    CONFLICT (content): Merge conflict in demo.m
+    Automatic merge failed; fix conflicts and then commit the result.
+    ```
+
+    If we look into the file `demo.m` we find
+
+    ```
+    <<<<<<< HEAD
+    plot(x,x)
+    =======
+    plot(y,x)
+    >>>>>>> fa5516bc91ddea24be32b3b238b7a9734e60698f
+    ```
+
+4.  Let us decide to keep the version `plot(y,x)` and commit the
+    changes by running in the terminal
+    ```
+    git commit
+    ```
+    
