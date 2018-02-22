@@ -376,3 +376,33 @@ and only commit the final version to the Git repository.
     ```
     git push
     ```
+
+# Tutorial 6: Merging entire branches
+
+Notice that we have done all previous changes in the `testing`
+branch. Instead of creating pull requests we can also `merge` the
+entire `testing` branch with the `master` branch.
+
+1.  Let is first switch back to the `master` branch
+
+    ```
+    git co master
+    ```
+
+    and update it to the latest version from the global repository
+
+    ```
+    git pull
+    ```
+
+2.  Next, we merge the `testing` branch with the `master` branch
+
+    ```
+    git merge testing
+    ```
+
+3.  Finally, we push the local changes in the `master` branch to the global repository
+
+    ```
+    git push
+    ```
