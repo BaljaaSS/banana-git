@@ -115,7 +115,7 @@ change should override the other one then Git needs your manual input.
     and commit the changes to the repository by running in the terminal
 
     ```
-    git commit -m "Changing demo.m"
+    git ci -m "Changing demo.m"
     ```
 
     without having updated the local checkout of the repository before.
@@ -140,9 +140,66 @@ change should override the other one then Git needs your manual input.
 
 4.  Let us decide to keep the version `plot(y,x)` and commit the
     changes by running in the terminal
+    
     ```
-    git commit
+    git ci
     ```
 
 # Tutorial 4: Branching and pull requests
 
+Branches allow you to develop several features independently from each
+other without "polluting" the master branch.
+
+1.  In the web frontend of Github we create a new branch `testing`.
+
+2.  Next we update our local checkout by running in the terminal
+
+    ```
+    git pull
+    ```
+
+3.  Our local checkoput now shows the different branches
+
+    ```
+    git br -a
+    
+    * master
+    remotes/origin/HEAD -> origin/master
+    remotes/origin/testing
+    remotes/origin/master
+    ```
+
+4.  We switch to the `testing` branch by running in the terminal
+
+    ```
+    git co -b testing origin/testing
+    ```
+    
+5.  This will create the local branch `testing` from the remote branch
+    `origin/testing`. Let us create a new file and commit it to the
+    `testing` branch.
+
+    ```
+    echo "demo(10)" > run.m
+    git add run.m
+    git ci -m "Added new file run.m"
+    git push
+    ```
+
+6.  This file has been committed to the `testing` branch and is not
+    available in the `master` branch (check this via the web
+    frontend). To merge the commit into the master branch we create a
+    so-called `pull request` via the web frontend.
+
+7.  We can accept the pull request via the web frontend to physically
+    merge the commit into the `master` branch. Verify that the file
+    `run.m` is in the `master` branch.
+
+8.  If you are the owner of the project you might want to prevent
+    direct commits to the master branch at all. You can enable this
+    feature in `Settings`->`Branches` by addint the `master` branch to
+    the list of protected branches and activete the check boxes
+    `Protect this branch` and `Require pull request reviews before
+    merging`.
+
+    
