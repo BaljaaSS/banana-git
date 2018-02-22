@@ -202,4 +202,177 @@ other without "polluting" the master branch.
     `Protect this branch` and `Require pull request reviews before
     merging`.
 
+# Tutorial 5: Creating formatted patches
+
+Git allows you to create formatted patches from your local commits
+that can be shared with colleagues, e.g., via email. This makes it
+possible to develop a feature incrementally with different programmers
+and only commit the final version to the Git repository.
+
+1.  Let us first create a new file `demo2.m`
+
+    ```
+    echo "function [x,y] = demo2(n) % DEMO x = linspace(0,1,n); y = sin(2*pi*x);" >> demo2.m
+    ```
+
+    add it to the local repository
+
+    ```
+    git add demo2.m
+    ```
+
+    and commit the changes
+
+    ```
+    git ci -m "Added file demo2.m"
+    ```
+
+2.  The git log shows the following
+
+    ```
+    git log
+
+    commit 1e4b5346cba92df983bcca375fb370677dd26600 (HEAD -> testing)
+    Author: Matthias Moeller <m.moller@tudelft.nl>
+    Date:   Thu Feb 22 15:58:25 2018 +0100
+
+        Added file demo2.m
+
+    commit 221a2c2bc79ec21f89c1058b25c53f54b666b86c (origin/Testing)
+    Author: Matthias Moeller <m.moller@tudelft.nl>
+    Date:   Thu Feb 22 15:48:38 2018 +0100
+
+        Updated README.md
+
+    commit 40ecd57a66b1340e0a8de95e9b4c3b44e056925b
+    Author: Matthias Moeller <m.moller@tudelft.nl>
+    Date:   Thu Feb 22 15:39:46 2018 +0100
+
+        Added new file run.m
+
+    commit 3883e04efa1da649d8303a61294208e197ec94c0 (origin/master, origin/HEAD, master)
+    Author: Matthias Moeller <m.moller@tudelft.nl>
+    Date:   Wed Feb 21 23:03:18 2018 +0100
+
+        Updated README.md
+
+    commit 9b50fcd6527b96a17f406b7a43c77758d98bf7ad
+    Author: Matthias Moeller <m.moller@tudelft.nl>
+    Date:   Wed Feb 21 22:57:38 2018 +0100
+
+        Updated README.md
+
+    ...
+    ```
+
+3.  Instead of pushing the local changes to the global repository, we
+    let git generate a formatted patch file
+
+    ```
+    git format-patch 221a2c2bc79ec21f89c1058b25c53f54b666b86c
+    ```
+
+    which is
+
+    ```
+    0001-Added-file-demo2.m.patch
+    ```
+
+    and send this file, e.g., via email to our colleague.
+
+4.  Our colleague can `apply` this patch to his local checkout
+
+    ```
+    git am 0001-Added-file-demo2.m.patch
+    ```
+
+    and now has the same state is we have.
+
+5.  Assume that multiple patches have been sent back and force unti a
+    stable version of the code has been reached.
+
+    ```
+    git log
+
+    commit c439af4ccea143a25ef5cd51a1b60a71e7abc77f (HEAD -> testing)
+    Author: Matthias Moeller <m.moller@tudelft.nl>
+    Date:   Thu Feb 22 16:04:02 2018 +0100
+
+        Updated demo2.m
+
+    commit 1e4b5346cba92df983bcca375fb370677dd26600
+    Author: Matthias Moeller <m.moller@tudelft.nl>
+    Date:   Thu Feb 22 15:58:25 2018 +0100
+
+        Added file demo2.m
+    ```
+
+6.  Instead of committing all local development steps to the global
+    repository we can combine them into a single commit.
+
+    ```
+    git rebase -i HEAD~5
+    ```
+
+    This shows you the last five commits starting at the latest one (HEAD)
+
+    ```
+    pick 3883e04 Updated README.md
+    pick 40ecd57 Added new file run.m
+    pick 221a2c2 Updated README.md
+    pick 1e4b534 Added file demo2.m
+    pick c439af4 Updated demo2.m
     
+    # Rebase 9b50fcd..c439af4 onto 9b50fcd (5 commands)
+    #
+    # Commands:
+    # p, pick = usecommit
+    # r, reword = use commit, but edit the commit message
+    # e, edit = use commit, but stop for amending
+    # s, squash = use commit, but meld into previous commit
+    # f, fixup = like "squash", but discard this commit's log message
+    # x, exec = run command (the rest of the line) using shell
+    # d, drop = remove commit
+    #
+    # These lines can be re-ordered; they are executed from top to bottom.
+    #
+    # If you remove a line here THAT COMMIT WILL BE LOST.
+    #
+    # However, if you remove everything, the rebase will be aborted.
+    #
+    ```
+7.  We simply want to combine the last to commits so we change the last two lines to
+
+    ```
+    e 1e4b534 Added file demo2.m
+    s c439af4 Updated demo2.m
+    ```
+
+    This will meld the last commit into the previous one and,
+    moreover, allow us to edit the commit message.
+
+8.  When exiting the editor git offers the following possibilities
+
+    ```
+    Stopped at 1e4b534...  Added file demo2.m
+    You can amend the commit now, with
+
+      git commit --amend 
+
+    Once you are satisfied with your changes, run
+
+      git rebase --continue
+    ```
+
+9.  We decide that we are satisfied with the changes and run
+
+    ```
+    git rebase --continue
+    ```
+
+10. Finally, we adjust the commit message and push the final commit to
+    the global repository
+
+    ```
+    git push
+    ```
